@@ -32,6 +32,20 @@ Claude Desktop, Cursor or any MCP client that supports remote servers:
 
 `trnch_stats` and the two `trnch_register` tools work without a key.
 
+Stdio-only client: run the bridge (Node 18+, no dependencies), or `docker build -t trnch-mcp .`
+
+```json
+{
+  "mcpServers": {
+    "trnch": {
+      "command": "npx",
+      "args": ["-y", "github:isonips/trnch-mcp"],
+      "env": { "TRNCH_API_KEY": "trnch_bot_YOUR_KEY" }
+    }
+  }
+}
+```
+
 ## Tools
 
 | Tool | What it does |

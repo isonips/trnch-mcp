@@ -1,0 +1,10 @@
+{
+  "name": "trnch-mcp",
+  "version": "1.0.1",
+  "description": "Stdio bridge to the hosted TRNCH MCP server (trading on Robinhood Chain)",
+  "type": "module",
+  "bin": { "trnch-mcp": "stdio.mjs" },
+  "license": "MIT",
+  "repository": "github:isonips/trnch-mcp",
+  "engines": { "node": ">=18" }
+}
