@@ -34,7 +34,8 @@ async function main() {
   const buy = await (await fetch(`${API}/buy`, { method: "POST", headers: auth, body: JSON.stringify({ tokenId: top.id, amountUsd: 10 }) })).json();
   if (buy.error) throw new Error(buy.error);
   if (buy.approval) await wallet.sendTransaction({ to: buy.approval.to, data: buy.approval.data });
-  const hash = await wallet.sendTransaction({ to: buy.tx.to, data: buy.tx.data, value: BigInt(buy.tx.value ?? 0) });
+  // `tx.gas` already carries a 30% margin: send it as is.
+  const hash = await wallet.sendTransaction({ to: buy.tx.to, data: buy.tx.data, value: BigInt(buy.tx.value ?? 0), gas: buy.tx.gas ? BigInt(buy.tx.gas) : undefined });
   console.log("bought, tx", hash);
 }
 

@@ -32,7 +32,8 @@ export interface TrnchActionProviderConfig {
 interface BuiltSwap {
   router: string;
   approval: { to: Hex; data: Hex } | null;
-  tx: { to: Hex; data: Hex; value?: string };
+  /** `gas`: the router estimate plus 30%, sent as is. */
+  tx: { to: Hex; data: Hex; value?: string; gas?: string | null };
 }
 
 /**
@@ -259,6 +260,7 @@ Inputs: tokenId (from get_trnch_heat) or token (address), percent, optional slip
       to: built.tx.to,
       data: built.tx.data,
       value: BigInt(built.tx.value ?? 0),
+      gas: built.tx.gas ? BigInt(built.tx.gas) : undefined,
     });
     await walletProvider.waitForTransactionReceipt(txHash);
     await this.#request(

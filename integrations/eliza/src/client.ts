@@ -14,7 +14,8 @@ const robinhoodChain = defineChain({
 type BuiltSwap = {
   router: string;
   approval: { to: Hex; data: Hex } | null;
-  tx: { to: Hex; data: Hex; value?: string };
+  /** `gas` : l'estimation du routeur + 30 %, a envoyer telle quelle. */
+  tx: { to: Hex; data: Hex; value?: string; gas?: string | null };
 };
 
 const keys = new Map<string, string>();
@@ -68,7 +69,7 @@ export async function executeSwap(runtime: IAgentRuntime, path: "/buy" | "/sell"
     const approval = await wallet.sendTransaction({ to: built.approval.to, data: built.approval.data });
     await reader.waitForTransactionReceipt({ hash: approval });
   }
-  const hash = await wallet.sendTransaction({ to: built.tx.to, data: built.tx.data, value: BigInt(built.tx.value ?? 0) });
+  const hash = await wallet.sendTransaction({ to: built.tx.to, data: built.tx.data, value: BigInt(built.tx.value ?? 0), gas: built.tx.gas ? BigInt(built.tx.gas) : undefined });
   await reader.waitForTransactionReceipt({ hash });
   await trnchRequest("/confirm", { method: "POST", body: JSON.stringify({ txHash: hash }) }, key).catch(() => undefined);
   return { hash, router: built.router };
