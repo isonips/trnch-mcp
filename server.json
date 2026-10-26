@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "fun.trnch/trnch",
+  "title": "TRNCH",
+  "description": "Trade new Robinhood Chain tokens: live Heat feed, TIA rug screening, best of six routers.",
+  "version": "1.0.0",
+  "websiteUrl": "https://trnch.fun/bot",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://trnch.fun/api/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer trnch_bot_... API key. Get one with trnch_register_message then trnch_register (wallet signature). Not needed for trnch_stats.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
