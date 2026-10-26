@@ -48,6 +48,10 @@ Stdio-only client: run the bridge (Node 18+, no dependencies), or `docker build 
 }
 ```
 
+## Agent frameworks
+
+Ready-made integrations in [`integrations/`](integrations): an [ElizaOS plugin](integrations/eliza), a [GOAT SDK plugin](integrations/goat) and a [Coinbase AgentKit action provider](integrations/agentkit). Each one reads the Heat, buys and sells from the agent's own wallet, and creates the API key by wallet signature.
+
 ## Tools
 
 | Tool | What it does |
