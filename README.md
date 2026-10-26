@@ -1,5 +1,7 @@
 # TRNCH MCP server
 
+[![TRNCH MCP connector – tool definition quality and endpoint health on Glama](https://glama.ai/mcp/connectors/fun.trnch/trnch/badges/score.svg)](https://glama.ai/mcp/connectors/fun.trnch/trnch)
+
 Trade new Robinhood Chain tokens from your AI agent, through [TRNCH](https://trnch.fun): a non-custodial trading terminal with a live feed of screened launches.
 
 - **The Heat**: new tokens, ranked live a few seconds after their pool is created.
