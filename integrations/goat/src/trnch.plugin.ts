@@ -5,11 +5,13 @@ import { TrnchService } from "./trnch.service";
 export type TrnchCtorParams = {
     // Optional: without it, a key is created on first use by signing a message with the wallet.
     apiKey?: string;
+    // Optional: your TRNCH referral code, you earn a share of the fees of the keys this plugin creates.
+    ref?: string;
 };
 
 export class TrnchPlugin extends PluginBase<EVMWalletClient> {
     constructor(params: TrnchCtorParams = {}) {
-        super("trnch", [new TrnchService(params.apiKey)]);
+        super("trnch", [new TrnchService(params.apiKey, params.ref)]);
     }
 
     // Robinhood Chain

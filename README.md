@@ -50,7 +50,7 @@ Stdio-only client: run the bridge (Node 18+, no dependencies), or `docker build 
 
 ## Agent frameworks
 
-Ready-made integrations in [`integrations/`](integrations): an [ElizaOS plugin](integrations/eliza), a [GOAT SDK plugin](integrations/goat) and a [Coinbase AgentKit action provider](integrations/agentkit). Each one reads the Heat, buys and sells from the agent's own wallet, and creates the API key by wallet signature.
+Ready-made integrations in [`integrations/`](integrations): an [ElizaOS plugin](integrations/eliza), a [GOAT SDK plugin](integrations/goat) and a [Coinbase AgentKit action provider](integrations/agentkit). Each one reads the Heat, buys and sells from the agent's own wallet, and creates the API key by wallet signature. Shipping an agent to others? Set your TRNCH referral code (`ref` / `TRNCH_REF`): every swap made with a key it creates pays you 25% of the TRNCH fee, for life.
 
 ## Tools
 

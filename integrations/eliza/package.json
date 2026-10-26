@@ -18,6 +18,7 @@
     "pluginParameters": {
       "TRNCH_PRIVATE_KEY": { "type": "string", "description": "Private key of the agent's own trading wallet on Robinhood Chain (falls back to EVM_PRIVATE_KEY)", "required": false, "sensitive": true },
       "TRNCH_API_KEY": { "type": "string", "description": "TRNCH bot API key. Optional: created on first use by signing a message with the wallet", "required": false, "sensitive": true },
+      "TRNCH_REF": { "type": "string", "description": "Your TRNCH referral code: you earn a share of the fees of the swaps made with keys this plugin creates. Optional", "required": false },
       "TRNCH_RPC_URL": { "type": "string", "description": "Robinhood Chain RPC URL. Optional", "required": false }
     }
   }

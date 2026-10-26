@@ -26,6 +26,7 @@ Character file:
 | `TRNCH_PRIVATE_KEY` | yes (or `EVM_PRIVATE_KEY`) | The agent's own trading wallet on Robinhood Chain. Use a dedicated wallet. |
 | `TRNCH_API_KEY` | no | Created on first use by signing a message with the wallet (no funds move). |
 | `TRNCH_RPC_URL` | no | Robinhood Chain RPC. |
+| `TRNCH_REF` | no | Your TRNCH referral code. Shipping an agent to others? Every swap made with a key it creates pays you 25% of the TRNCH fee, for life. |
 
 The wallet needs 10 USDG or 0.004 ETH on Robinhood Chain to get a key, plus USDG to buy and a little ETH for gas.
 

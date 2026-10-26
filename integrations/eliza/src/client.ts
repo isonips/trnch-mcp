@@ -48,11 +48,12 @@ export async function trnchKey(runtime: IAgentRuntime): Promise<string> {
   const { account } = agentWallet(runtime);
   const cached = keys.get(account.address);
   if (cached) return cached;
+  const ref = runtime.getSetting("TRNCH_REF") as string | null;
   const { message } = await trnchRequest(`/register?wallet=${account.address}`);
   const signature = await account.signMessage({ message });
   const reg = await trnchRequest("/register", {
     method: "POST",
-    body: JSON.stringify({ wallet: account.address, message, signature, label: "eliza" }),
+    body: JSON.stringify({ wallet: account.address, message, signature, label: "eliza", ...(ref ? { ref } : {}) }),
   });
   keys.set(account.address, reg.key);
   return reg.key as string;

@@ -4,7 +4,12 @@ import { ActionProvider } from "../actionProvider";
 import { CreateAction } from "../actionDecorator";
 import { Network } from "../../network";
 import { EvmWalletProvider } from "../../wallet-providers";
-import { GetTrnchHeatSchema, GetTrnchStatsSchema, TrnchBuySchema, TrnchSellSchema } from "./schemas";
+import {
+  GetTrnchHeatSchema,
+  GetTrnchStatsSchema,
+  TrnchBuySchema,
+  TrnchSellSchema,
+} from "./schemas";
 
 const TRNCH_API = "https://trnch.fun/api/bot/v1";
 const ROBINHOOD_CHAIN_ID = "4663";
@@ -17,6 +22,11 @@ export interface TrnchActionProviderConfig {
    * TRNCH bot API key. Optional: without it, a key is created on first use by signing a message with the wallet (no funds move).
    */
   apiKey?: string;
+
+  /**
+   * Your TRNCH referral code. Optional: every swap made with a key this provider creates pays its owner a share of the TRNCH fee.
+   */
+  ref?: string;
 }
 
 interface BuiltSwap {
@@ -31,6 +41,7 @@ interface BuiltSwap {
  */
 export class TrnchActionProvider extends ActionProvider<EvmWalletProvider> {
   #apiKey: string | undefined;
+  #ref: string | undefined;
 
   /**
    * Constructor for the TrnchActionProvider.
@@ -40,6 +51,7 @@ export class TrnchActionProvider extends ActionProvider<EvmWalletProvider> {
   constructor(config: TrnchActionProviderConfig = {}) {
     super("trnch", []);
     this.#apiKey = config.apiKey || process.env.TRNCH_API_KEY;
+    this.#ref = config.ref || process.env.TRNCH_REF;
   }
 
   /**
@@ -106,11 +118,22 @@ Tokens kept out by TIA are refused. The 0.5% TRNCH fee is already deducted from 
 Inputs: tokenId (from get_trnch_heat) or token (address), amountUsd, optional slippageBps.`,
     schema: TrnchBuySchema,
   })
-  async buy(walletProvider: EvmWalletProvider, args: z.infer<typeof TrnchBuySchema>): Promise<string> {
+  async buy(
+    walletProvider: EvmWalletProvider,
+    args: z.infer<typeof TrnchBuySchema>,
+  ): Promise<string> {
     return this.#run(async () => {
       const key = await this.#key(walletProvider);
-      const body = { ...(args.tokenId ? { tokenId: args.tokenId } : { token: args.token }), amountUsd: args.amountUsd, slippageBps: args.slippageBps };
-      const built = (await this.#request("/buy", { method: "POST", body: JSON.stringify(body) }, key)) as BuiltSwap;
+      const body = {
+        ...(args.tokenId ? { tokenId: args.tokenId } : { token: args.token }),
+        amountUsd: args.amountUsd,
+        slippageBps: args.slippageBps,
+      };
+      const built = (await this.#request(
+        "/buy",
+        { method: "POST", body: JSON.stringify(body) },
+        key,
+      )) as BuiltSwap;
       return this.#execute(walletProvider, built, key);
     });
   }
@@ -130,11 +153,22 @@ The 0.5% TRNCH fee is already deducted from the quote.
 Inputs: tokenId (from get_trnch_heat) or token (address), percent, optional slippageBps.`,
     schema: TrnchSellSchema,
   })
-  async sell(walletProvider: EvmWalletProvider, args: z.infer<typeof TrnchSellSchema>): Promise<string> {
+  async sell(
+    walletProvider: EvmWalletProvider,
+    args: z.infer<typeof TrnchSellSchema>,
+  ): Promise<string> {
     return this.#run(async () => {
       const key = await this.#key(walletProvider);
-      const body = { ...(args.tokenId ? { tokenId: args.tokenId } : { token: args.token }), percent: args.percent, slippageBps: args.slippageBps };
-      const built = (await this.#request("/sell", { method: "POST", body: JSON.stringify(body) }, key)) as BuiltSwap;
+      const body = {
+        ...(args.tokenId ? { tokenId: args.tokenId } : { token: args.token }),
+        percent: args.percent,
+        slippageBps: args.slippageBps,
+      };
+      const built = (await this.#request(
+        "/sell",
+        { method: "POST", body: JSON.stringify(body) },
+        key,
+      )) as BuiltSwap;
       return this.#execute(walletProvider, built, key);
     });
   }
@@ -156,7 +190,7 @@ Inputs: tokenId (from get_trnch_heat) or token (address), percent, optional slip
    */
   async #run(fn: () => Promise<unknown>): Promise<string> {
     try {
-      return JSON.stringify({ success: true, ...(await fn() as object) });
+      return JSON.stringify({ success: true, ...((await fn()) as object) });
     } catch (error) {
       return JSON.stringify({ success: false, error: `${error}` });
     }
@@ -175,7 +209,8 @@ Inputs: tokenId (from get_trnch_heat) or token (address), percent, optional slip
     if (key) headers.authorization = `Bearer ${key}`;
     const response = await fetch(`${TRNCH_API}${path}`, { ...init, headers });
     const body = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(`TRNCH ${path} ${response.status}: ${body.error ?? response.statusText}`);
+    if (!response.ok)
+      throw new Error(`TRNCH ${path} ${response.status}: ${body.error ?? response.statusText}`);
     return body;
   }
 
@@ -192,7 +227,13 @@ Inputs: tokenId (from get_trnch_heat) or token (address), percent, optional slip
     const signature = await walletProvider.signMessage(message);
     const reg = await this.#request("/register", {
       method: "POST",
-      body: JSON.stringify({ wallet, message, signature, label: "agentkit" }),
+      body: JSON.stringify({
+        wallet,
+        message,
+        signature,
+        label: "agentkit",
+        ...(this.#ref ? { ref: this.#ref } : {}),
+      }),
     });
     this.#apiKey = reg.key as string;
     return this.#apiKey;
@@ -208,7 +249,10 @@ Inputs: tokenId (from get_trnch_heat) or token (address), percent, optional slip
    */
   async #execute(walletProvider: EvmWalletProvider, built: BuiltSwap, key: string) {
     if (built.approval) {
-      const approvalHash = await walletProvider.sendTransaction({ to: built.approval.to, data: built.approval.data });
+      const approvalHash = await walletProvider.sendTransaction({
+        to: built.approval.to,
+        data: built.approval.data,
+      });
       await walletProvider.waitForTransactionReceipt(approvalHash);
     }
     const txHash = await walletProvider.sendTransaction({
@@ -217,7 +261,11 @@ Inputs: tokenId (from get_trnch_heat) or token (address), percent, optional slip
       value: BigInt(built.tx.value ?? 0),
     });
     await walletProvider.waitForTransactionReceipt(txHash);
-    await this.#request("/confirm", { method: "POST", body: JSON.stringify({ txHash }) }, key).catch(() => undefined);
+    await this.#request(
+      "/confirm",
+      { method: "POST", body: JSON.stringify({ txHash }) },
+      key,
+    ).catch(() => undefined);
     return { txHash, router: built.router };
   }
 }

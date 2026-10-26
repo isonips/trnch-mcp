@@ -31,7 +31,9 @@ export const GetTrnchHeatSchema = z
     since: z
       .string()
       .nullable()
-      .describe("nextSince returned by the previous call, to get only new entries. Null on the first call."),
+      .describe(
+        "nextSince returned by the previous call, to get only new entries. Null on the first call.",
+      ),
   })
   .strip();
 
@@ -42,7 +44,11 @@ export const TrnchBuySchema = z
   .object({
     tokenId,
     token,
-    amountUsd: z.number().positive().max(50000).describe("Amount to spend in US dollars, paid in USDG"),
+    amountUsd: z
+      .number()
+      .positive()
+      .max(50000)
+      .describe("Amount to spend in US dollars, paid in USDG"),
     slippageBps,
   })
   .strip()
@@ -55,7 +61,11 @@ export const TrnchSellSchema = z
   .object({
     tokenId,
     token,
-    percent: z.number().positive().max(100).describe("Share of the wallet balance to sell, 100 = all"),
+    percent: z
+      .number()
+      .positive()
+      .max(100)
+      .describe("Share of the wallet balance to sell, 100 = all"),
     slippageBps,
   })
   .strip()

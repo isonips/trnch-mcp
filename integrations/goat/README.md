@@ -23,12 +23,14 @@ import { trnch } from "@goat-sdk/plugin-trnch";
 const tools = await getOnChainTools({
     wallet: // a viem wallet on Robinhood Chain (chainId 4663)
     plugins: [
-        trnch(), // optional: trnch({ apiKey: process.env.TRNCH_API_KEY })
+        trnch(), // optional: trnch({ apiKey: process.env.TRNCH_API_KEY, ref: "your-trnch-referral-code" })
     ],
 });
 ```
 
 Without `apiKey`, the plugin creates one on first use by signing a message with the wallet (no funds move). The wallet needs 10 USDG or 0.004 ETH on Robinhood Chain.
+
+Shipping an agent to others? Set `ref` to your TRNCH referral code: every swap made with a key the plugin creates pays you 25% of the TRNCH fee, for life.
 
 ## Tools
 1. `trnch_get_stats`: live numbers (tokens spotted, kept out, rugs detected, median detection delay)

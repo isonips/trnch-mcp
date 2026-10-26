@@ -13,7 +13,10 @@ type BuiltSwap = {
 export class TrnchService {
     private apiKey: string | undefined;
 
-    constructor(apiKey?: string) {
+    constructor(
+        apiKey?: string,
+        private readonly ref?: string,
+    ) {
         this.apiKey = apiKey;
     }
 
@@ -34,7 +37,7 @@ export class TrnchService {
         const { signature } = await walletClient.signMessage(message);
         const reg = await this.request("/register", {
             method: "POST",
-            body: JSON.stringify({ wallet, message, signature, label: "goat" }),
+            body: JSON.stringify({ wallet, message, signature, label: "goat", ...(this.ref ? { ref: this.ref } : {}) }),
         });
         this.apiKey = reg.key as string;
         return this.apiKey;
@@ -47,7 +50,9 @@ export class TrnchService {
             data: built.tx.data,
             value: BigInt(built.tx.value ?? 0),
         });
-        await this.request("/confirm", { method: "POST", body: JSON.stringify({ txHash: hash }) }, key).catch(() => undefined);
+        await this.request("/confirm", { method: "POST", body: JSON.stringify({ txHash: hash }) }, key).catch(
+            () => undefined,
+        );
         return { hash, router: built.router };
     }
 
@@ -78,7 +83,11 @@ export class TrnchService {
     })
     async buy(walletClient: EVMWalletClient, parameters: BuyParameters) {
         const key = await this.key(walletClient);
-        const built = (await this.request("/buy", { method: "POST", body: JSON.stringify(parameters) }, key)) as BuiltSwap;
+        const built = (await this.request(
+            "/buy",
+            { method: "POST", body: JSON.stringify(parameters) },
+            key,
+        )) as BuiltSwap;
         return this.execute(walletClient, built, key);
     }
 
@@ -89,7 +98,11 @@ export class TrnchService {
     })
     async sell(walletClient: EVMWalletClient, parameters: SellParameters) {
         const key = await this.key(walletClient);
-        const built = (await this.request("/sell", { method: "POST", body: JSON.stringify(parameters) }, key)) as BuiltSwap;
+        const built = (await this.request(
+            "/sell",
+            { method: "POST", body: JSON.stringify(parameters) },
+            key,
+        )) as BuiltSwap;
         return this.execute(walletClient, built, key);
     }
 }

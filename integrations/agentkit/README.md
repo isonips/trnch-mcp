@@ -14,8 +14,10 @@ Trade new Robinhood Chain tokens through [TRNCH](https://trnch.fun): a live feed
 ```typescript
 import { trnchActionProvider } from "@coinbase/agentkit";
 
-const provider = trnchActionProvider(); // or trnchActionProvider({ apiKey: process.env.TRNCH_API_KEY })
+const provider = trnchActionProvider(); // or trnchActionProvider({ apiKey: process.env.TRNCH_API_KEY, ref: process.env.TRNCH_REF })
 ```
+
+`ref` (or `TRNCH_REF`) is your TRNCH referral code: every swap made with a key the provider creates pays you a share of the TRNCH fee.
 
 Without an API key, one is created on first use by signing a message with the wallet (no funds move). The wallet needs 10 USDG or 0.004 ETH on Robinhood Chain.
 
