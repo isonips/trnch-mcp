@@ -1,7 +1,7 @@
 {
   "name": "trnch-mcp",
-  "version": "1.0.2",
-  "description": "MCP server for AI agents to trade new Robinhood Chain tokens through TRNCH: screened launches, rugs refused, best route across six routers. Non-custodial.",
+  "version": "1.0.3",
+  "description": "Robinhood Chain MCP server for AI agents: trade new Robinhood Chain memecoins through TRNCH with rug and honeypot checks and the best route across six routers. Non-custodial.",
   "type": "module",
   "bin": {
     "trnch-mcp": "stdio.mjs"

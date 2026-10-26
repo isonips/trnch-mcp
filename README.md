@@ -1,8 +1,8 @@
-# TRNCH MCP server
+# TRNCH: Robinhood Chain MCP server
 
 [![TRNCH MCP connector – tool definition quality and endpoint health on Glama](https://glama.ai/mcp/connectors/fun.trnch/trnch/badges/score.svg)](https://glama.ai/mcp/connectors/fun.trnch/trnch)
 
-**Robinhood Chain trading for AI agents.** Trade new Robinhood Chain tokens (chainId 4663) from your agent through [TRNCH](https://trnch.fun): a non-custodial trading terminal with a live feed of screened launches.
+**Robinhood Chain MCP server for AI agents: memecoin trading, rug and honeypot checks, best route.** Trade new Robinhood Chain tokens (chainId 4663) from your agent through [TRNCH](https://trnch.fun): a non-custodial trading terminal with a live feed of screened launches.
 
 - **The Heat**: new tokens, ranked live a few seconds after their pool is created.
 - **TIA (Trnch Intelligence Agency)**: screens every launch before it reaches the feed. Rugs, honeypots, scam contracts, heavy sell taxes and copycats are kept out, and the API refuses to trade them.

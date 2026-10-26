@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "fun.trnch/trnch",
   "title": "TRNCH",
-  "description": "Robinhood Chain trading for AI agents: screened launches, rugs refused, best of six routers.",
-  "version": "1.0.2",
+  "description": "Robinhood Chain MCP server: memecoin trading for AI agents, rug and honeypot checks, best route.",
+  "version": "1.0.3",
   "websiteUrl": "https://trnch.fun/bot",
   "remotes": [
     {
