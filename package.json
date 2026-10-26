@@ -1,10 +1,33 @@
 {
   "name": "trnch-mcp",
   "version": "1.0.2",
-  "description": "Stdio bridge to the hosted TRNCH MCP server (trading on Robinhood Chain)",
+  "description": "MCP server for AI agents to trade new Robinhood Chain tokens through TRNCH: screened launches, rugs refused, best route across six routers. Non-custodial.",
   "type": "module",
-  "bin": { "trnch-mcp": "stdio.mjs" },
+  "bin": {
+    "trnch-mcp": "stdio.mjs"
+  },
   "license": "MIT",
   "repository": "github:isonips/trnch-mcp",
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "ai-agents",
+    "robinhood-chain",
+    "trading",
+    "dex-aggregator",
+    "rug-check",
+    "memecoin",
+    "trnch"
+  ],
+  "homepage": "https://trnch.fun/bot",
+  "files": [
+    "stdio.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "mcpName": "fun.trnch/trnch"
 }

@@ -1,0 +1,22 @@
+# Publishes trnch-mcp to npm when a version tag (v1.2.3) is pushed, or by hand from the Actions tab.
+# Needs the NPM_TOKEN repository secret (npm granular access token, read and write).
+name: publish
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
