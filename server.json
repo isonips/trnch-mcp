@@ -3,7 +3,7 @@
   "name": "fun.trnch/trnch",
   "title": "TRNCH",
   "description": "Trade new Robinhood Chain tokens: live Heat feed, TIA rug screening, best of six routers.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://trnch.fun/bot",
   "remotes": [
     {
@@ -18,5 +18,9 @@
         }
       ]
     }
-  ]
+  ],
+  "repository": {
+    "url": "https://github.com/isonips/trnch-mcp",
+    "source": "github"
+  }
 }
